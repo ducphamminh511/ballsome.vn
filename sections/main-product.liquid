@@ -193,6 +193,7 @@
                         loading="lazy"
                         data-img-url="{{ media.preview_image | img_url: '480x480' }}"
                       data-zoom-img-url="{{ media.preview_image | img_url: '2400x2400' }}"
+                      class="demo-trigger"
                       >
                     </button>
                   </li>
@@ -204,7 +205,7 @@
         {%- endif -%}
       </media-gallery>
     </div>
-    <div class="product__info-wrapper  grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}">
+    <div class="product__info-wrapper zoom-container grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}">
       <div id="ProductInfo-{{ section.id }}" class=" product-detail product__info-container{% if section.settings.enable_sticky_info %} product__info-container--sticky{% endif %}">
         {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
@@ -510,6 +511,8 @@
         </a>
       </div>
     </div>
+
+    
     
   </div>
 
@@ -1142,9 +1145,7 @@
 <script>
   window.onscroll = function() {myFunction()};
  const form_id = "{{ product_form_id }}";
- console.log(form_id);
 function myFunction() {
-  console.log('abc');
   if (document.documentElement.scrollTop > 1000) {
     $("#sticky-add-to-cart").addClass("sticky-show");
   } else {
@@ -1152,7 +1153,6 @@ function myFunction() {
   }
 }
 $('#sticky-add-to-cart-btn').on('click', function(){
-  console.log('ahihi');
   $(`#${form_id}`).submit();
 })
 </script>

@@ -1,0 +1,8 @@
+.demo-trigger {
+    display: inline-block;
+    width: 30%;
+    float: left;
+}
+.zoom-container{
+    position: relative;
+}

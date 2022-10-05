@@ -14,6 +14,8 @@
     }
   }
 {%- endstyle -%}
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    crossorigin="anonymous"></script>
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
   <div class="collapsible-content collapsible-{{ section.settings.layout }}-layout isolate{% if section.settings.layout == 'section' %} page-width{% elsif section.settings.layout == 'none' %} content-container content-container--full-width{% endif %}">
@@ -72,12 +74,29 @@
                 </details>
               </div>
             {%- endfor -%}
+            <div class="accordion{% if section.settings.layout == 'row' %} content-container color-{{ section.settings.container_color_scheme }} gradient{% endif %}" {{ section.blocks[3].shopify_attributes }}>
+              <details id="Details-{{ block.id }}-{{ section.id }}"{% if section.settings.open_first_collapsible_row and forloop.first %} open{% endif %}>
+                <summary id="Summary-{{ block.id }}-{{ section.id }}">
+                  {% render 'icon-accordion', icon: section.blocks[3].settings.icon %}
+                  <h3 class="accordion__title h4">
+                    {{ section.blocks[3].settings.heading | default: section.blocks[3].settings.page.title }}
+                  </h3>
+                  {% render 'icon-caret' %}
+                </summary>
+                <div class="accordion__content rte" id="CollapsibleAccordion-{{ block.id }}-{{ section.id }}" role="region" aria-labelledby="Summary-{{ block.id }}-{{ section.id }}">
+                  {{ section.blocks[3].settings.row_content }}
+                  <a tabindex="0" class="" role="button" data-toggle="popover" data-trigger="focus" title="Thành phần" data-content="And here's some amazing content. It's very engaging. Right?">Purified Water</a>
+                  
+                </div>
+              </details>
+            </div>
           </div>
         </div>
       </div>
      
     </div>
   </div>
+  
   <div class="container">
     <div class="row"></div>
   </div>
@@ -546,6 +565,9 @@
       document.querySelector('#div-1').scrollIntoView({
           behavior: 'smooth'
       });
+    })
+    $(function () {
+      $('[data-toggle="popover"]').popover()
     })
   });	
 </script>

@@ -105,7 +105,7 @@
           "settings": {
             "heading": "Chi tiết",
             "icon": "clipboard",
-            "row_content": "<p>Làm sạch, kháng khuẩn, khử mùi, bảo vệ da và không kích ứng. <\/p><p>Thể tích: 250ml. <\/p><p>An toàn để sử dụng cho cơ thể và vùng kín hàng ngày.<\/p>",
+            "row_content": "<p>Khử mùi, thơm vùng kín, kháng khuẩn, tạo cảm giác khô thoáng, bảo vệ da và không kích ứng. <\/p><p>Thể tích: 50ml. <\/p><p>An toàn để sử dụng cho cơ thể và vùng kín hàng ngày.<\/p>",
             "page": ""
           }
         },
@@ -114,7 +114,7 @@
           "settings": {
             "heading": "Thành phần",
             "icon": "leaf",
-            "row_content": "<p>Purified Water, Sodium C14-16, Olefin Sulfonate, Acrylates Copolymer, Cocamidopropyl Betaine, Glycerin, Charcoal Powder, Fragrance, Sodium Chloride (Salt), Phenoxyethanol, Caprylyl Glycol, Ethylhexylglycerin, Sodium Hydroxide, Citric Acid, Aloe Powder, Vitamin E, Cucumber Extract,Chamomile, Licorice Root, Green Tea Extract, Lavender, Cedarwood Oil<\/p>",
+            "row_content": "<p>Water, glycerin, propanediol 1,3, sorbitan oleate, Zinc ricinoleate, sodium lauroyl sarcosinate, tetrahydroxypropyl ethylenediamine, polysorbate 20, fragrance, phenoxyethanol (and) caprylyl glycol, allantoin, citric acid, lavender essential oil, tea tree essential oil, aloe vera extract, witch hazel extract, chamomile extract, green tea extract<\/p>",
             "page": ""
           }
         }
@@ -164,14 +164,14 @@
         "heading": {
           "type": "heading",
           "settings": {
-            "heading": "<p>\"Sạch body vừa phải. Mùi thơm dịu nhẹ. Cảm giác sảng khoải sau khi tắm. Và quan trong hơn cả, toàn những nguyên liệu tốt cho “Bi\".\"<\/p>",
+            "heading": "<p>“Khử mùi và khô thoáng vùng kín. Mùi thơm dịu nhẹ. Cảm giác sảng khoải sau khi dùng. Và quan trong hơn cả, toàn những nguyên liệu tốt cho “Bi\".”<\/p>",
             "heading_size": "h1"
           }
         },
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>- KIỆT -<\/p>"
+            "text": "<p>- TÂM -<\/p>"
           }
         }
       },
