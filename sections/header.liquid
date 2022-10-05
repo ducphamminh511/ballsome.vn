@@ -25,7 +25,7 @@
 <noscript>{{ 'component-menu-drawer.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'component-cart-notification.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'component-cart-items.css' | asset_url | stylesheet_tag }}</noscript>
-
+{{ 'header.css' | asset_url | stylesheet_tag }}
 <style>
   header-drawer {
     justify-self: start;
@@ -140,7 +140,9 @@
                   <ul class="menu-drawer__menu has-submenu list-menu" role="list">
                     {%- for link in section.settings.menu.links -%}
                       <li>
+                
                         {%- if link.links != blank -%}
+
                           <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
                             <summary class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.child_active %} menu-drawer__menu-item--active{% endif %}">
                               {{ link.title | escape }}
@@ -191,9 +193,39 @@
                             </div>
                           </details>
                         {%- else -%}
-                          <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
-                            {{ link.title | escape }}
-                          </a>
+                          {% if link.title contains 'SHOP' %}
+                            <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+                              SHOP ALL >
+                            </a>
+                            {% assign description = "description 1, description 2, description 3" %}
+                            {% assign descriptionArr = description | split: ',' %}
+                            {% assign counter = 0 %}
+                            <div class="row p-5 pt-0">
+                              {% for product in collections['all-products'].products %}
+                                <div class="col-12 p-5">
+                                  <a href="{{product.url}}" class="product-menu">
+                                    <div class="row">
+                                      <div class="col-3">
+                                        <img src="{{product.featured_image.src | image_url: width: 60}}" alt="">
+                                      </div>
+                                      <div class="col-9">
+                                        <p class="product-title">{{product.title}}</p>
+                                        <p class="product-description">{{descriptionArr[counter]}}</p>
+                                        {% assign counter = counter | plus: 1 %}
+                                      </div>
+                                    </div>
+                                  </a>
+                                </div>
+                              {% endfor %}
+                            </div>
+                            <hr/>
+                          {%- else -%}
+                            <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+                              {{ link.title | escape }}
+                            </a>
+                            <hr/>
+                          {% endif %}
+                          
                         {%- endif -%}
                       </li>
                     {%- endfor -%}
@@ -295,7 +327,7 @@
     {%- endif -%}
 
     {%- if section.settings.logo_position == 'top-center' or section.settings.menu == blank -%}
-      <details-modal class="header__search">
+      <!-- <details-modal class="header__search">
         <details>
           <summary class="header__icon header__icon--search header__icon--summary link focus-inset modal__toggle" aria-haspopup="dialog" aria-label="{{ 'general.search.search' | t }}">
             <span>
@@ -366,7 +398,116 @@
             </div>
           </div>
         </details>
-      </details-modal>
+      </details-modal> -->
+      <div class="d-none d-md-block">
+        <ul class="list-menu list-menu--inline" role="list">
+          <!-- {%- for link in section.settings.menu.links -%}
+            <li>
+              {%- if link.links != blank -%}
+                <header-menu>
+                  <details id="Details-HeaderMenu-{{ forloop.index }}">
+                    <summary class="header__menu-item list-menu__item link focus-inset">
+                      <span {%- if link.child_active %} class="header__active-menu-item"{% endif %}>{{ link.title | escape }}</span>
+                      {% render 'icon-caret' %}
+                    </summary>
+                    <ul id="HeaderMenu-MenuList-{{ forloop.index }}" class="header__submenu list-menu list-menu--disclosure gradient caption-large motion-reduce global-settings-popup" role="list" tabindex="-1">
+                      {%- for childlink in link.links -%}
+                        <li>
+                          {%- if childlink.links == blank -%}
+                            <a href="{{ childlink.url }}" class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if childlink.current %} list-menu__item--active{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>
+                              {{ childlink.title | escape }}
+                            </a>
+                          {%- else -%}
+                            <details id="Details-HeaderSubMenu-{{ forloop.index }}">
+                              <summary class="header__menu-item link link--text list-menu__item focus-inset caption-large">
+                                <span>{{ childlink.title | escape }}</span>
+                                {% render 'icon-caret' %}
+                              </summary>
+                              <ul id="HeaderMenu-SubMenuList-{{ forloop.index }}" class="header__submenu list-menu motion-reduce">
+                                {%- for grandchildlink in childlink.links -%}
+                                  <li>
+                                    <a href="{{ grandchildlink.url }}" class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if grandchildlink.current %} list-menu__item--active{% endif %}"{% if grandchildlink.current %} aria-current="page"{% endif %}>
+                                      {{ grandchildlink.title | escape }}
+                                    </a>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            </details>
+                          {%- endif -%}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </details>
+                </header-menu>
+              {%- else -%}
+                <a href="{{ link.url }}" class="header__menu-item header__menu-item list-menu__item link link--text focus-inset"{% if link.current %} aria-current="page"{% endif %}>
+                  <span {%- if link.current %} class="header__active-menu-item"{% endif %}>{{ link.title | escape }}</span>
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%} -->
+          <li>
+            <div class="dropdown">
+              <div class="navbar-menu" id="petsMenu">
+                <a href="/collections/all-products" class="header__menu-item header__menu-item list-menu__item link link--text focus-inset">
+                  <span style="padding-right: 5px" class="menueTab">SHOP</span>
+                </a>
+              </div>
+              <div class="dropdown-content">
+                <div class="container page-width pl-0 pr-0 petsListContainer">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="row mx-5">
+                        {% for product in collections['all-products'].products %}
+                        <div class="col-md-4 p-2 text-center">
+                          <a href="{{product.url}}" class="product-menu">
+                            <img src="{{product.featured_image.src | image_url: width: 200}}" alt="">
+                            <p class="product-title">{{product.title}}</p>
+                          </a>
+                        </div>
+                      {% endfor %}
+                      </div>
+                    </div>
+                    <!-- <div class="col-md-4 p-4">
+                      <a href="/collections/all-products" class="shop-all">Shop All ></a>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="row">
+                        {% for product in collections['all-products'].products %}
+                          <div class="col-md-4 p-5">
+                            <a href="{{product.url}}" class="product-menu">
+                              <img src="{{product.featured_image.src | image_url: width: 200}}" alt="">
+                              <p class="product-title">{{product.title}}</p>
+                            </a>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div> -->
+                  </div>
+                  <div class="row text-center">
+                    <div class="col-md-12 p-4">
+                      <div class="w-25 mx-auto">
+                        <a href="/collections/all-products" class="shop-all button button--primary">SHOP ALL</a>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown">
+              <div class="navbar-menu" id="petsMenu">
+                <a href="/pages/our-story" class="header__menu-item header__menu-item list-menu__item link link--text focus-inset">
+                  <span style="padding-right: 5px" class="menueTab">OUR STORY</span>
+                </a>
+              </div>
+             
+            </div>
+          </li>
+        </ul>
+      </div>
     {%- endif -%}
 
     {%- if request.page_type == 'index' -%}
@@ -391,7 +532,7 @@
       </h1>
     {%- endif -%}
 
-    {%- if section.settings.menu != blank -%}
+    <!-- {%- if section.settings.menu != blank -%}
       {%- if section.settings.menu_type_desktop == 'dropdown' -%}
         <nav class="header__inline-menu">
           <ul class="list-menu list-menu--inline" role="list">
@@ -488,10 +629,10 @@
           </ul>
         </nav>
       {%- endif -%}
-    {%- endif -%}
+    {%- endif -%} -->
 
     <div class="header__icons">
-      <details-modal class="header__search">
+      <!-- <details-modal class="header__search">
         <details>
           <summary class="header__icon header__icon--search header__icon--summary link focus-inset modal__toggle" aria-haspopup="dialog" aria-label="{{ 'general.search.search' | t }}">
             <span>
@@ -562,7 +703,7 @@
             </div>
           </div>
         </details>
-      </details-modal>
+      </details-modal> -->
 
       {%- if shop.customer_accounts_enabled -%}
         <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}">

@@ -373,12 +373,17 @@
 <script >
   $(document).ready(function(){
     var demoTrigger = document.querySelector('.feature-img');
-    var paneContainer = document.querySelector('.product-detail');
+    var abc = document.querySelector('.zoom-container');
+    console.log(abc);
     new Drift(demoTrigger, {
-      paneContainer: paneContainer,
+      paneContainer: abc,
+      inlinePane: false,
     });
-    $('.shopify-payment-button__button').text('Mua Ngay');
+    setTimeout(changeText, 2500);
   })
+  function changeText(){
+    $('.shopify-payment-button__button').text('MUA NGAY');
+  }
   
 </script>
 </body>

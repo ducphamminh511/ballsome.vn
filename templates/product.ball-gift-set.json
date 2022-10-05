@@ -81,13 +81,14 @@
     },
     "collapsible-content": {
       "type": "collapsible-content",
+      "disabled": true,
       "blocks": {
         "collapsible-row-0": {
           "type": "collapsible_row",
           "settings": {
             "heading": "Nổi bật",
             "icon": "star",
-            "row_content": "<p>Chứa các chiết xuất tự nhiên.<\/p><p>Không chứa sulfate, paraben và hoá chất tạo màu tổng hợp; Không thử nghiêm trên động vật.<\/p><p>Được sản xuất tại nhà máy đạt tiêu chuẩn cGMP ASEAN.<\/p>",
+            "row_content": "<p>Chứa các chiết xuất tự nhiên.<\/p><p>Không chứa sulfate, paraben và hoá chất tạo màu tổng hợp; Không thử nghiêm trên động vật.<\/p><p>Được sản xuất tại nhà máy đạt tiêu chuẩn cGMP ASEAN.<\/p><p><\/p><p>AAA<\/p>",
             "page": ""
           }
         },
@@ -105,7 +106,7 @@
           "settings": {
             "heading": "Chi tiết",
             "icon": "clipboard",
-            "row_content": "<p>Làm sạch, kháng khuẩn, khử mùi, bảo vệ da và không kích ứng. <\/p><p>Thể tích: 250ml. <\/p><p>An toàn để sử dụng cho cơ thể và vùng kín hàng ngày.<\/p>",
+            "row_content": "<p>Khử mùi, thơm vùng kín, kháng khuẩn, tạo cảm giác khô thoáng, bảo vệ da và không kích ứng. Thể tích: 50ml. An toàn để sử dụng cho cơ thể và vùng kín hàng ngày.<\/p>",
             "page": ""
           }
         },
@@ -142,7 +143,6 @@
     },
     "product-recommendations": {
       "type": "product-recommendations",
-      "disabled": true,
       "settings": {
         "heading": "You may also like",
         "heading_size": "h2",
@@ -164,14 +164,14 @@
         "heading": {
           "type": "heading",
           "settings": {
-            "heading": "<p>\"Sạch body vừa phải. Mùi thơm dịu nhẹ. Cảm giác sảng khoải sau khi tắm. Và quan trong hơn cả, toàn những nguyên liệu tốt cho “Bi\".\"<\/p>",
+            "heading": "<p>“Một bộ sản phẩm tuyệt vời không thể thiếu cho nam giới. Đặc biệt đối với một người thường xuyên chơi thể thao như mình.\"<\/p>",
             "heading_size": "h1"
           }
         },
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>- KIỆT -<\/p>"
+            "text": "<p>- ĐỨC -<\/p>"
           }
         }
       },
