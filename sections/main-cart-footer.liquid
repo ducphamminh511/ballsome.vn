@@ -1,0 +1,262 @@
+{{ 'component-cart.css' | asset_url | stylesheet_tag }}
+{{ 'component-totals.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-discounts.css' | asset_url | stylesheet_tag }}
+
+<div class="page-width{% if cart == empty %} is-empty{% endif %}" id="main-cart-footer" data-id="{{ section.id }}">
+  <div>
+    <div class="cart__footer">
+      {%- if settings.show_cart_note -%}
+        <cart-note class="cart__note field">
+          <label for="Cart-note">{{ 'sections.cart.note' | t }}</label>
+          <textarea class="text-area field__input" name="note" form="cart" id="Cart-note" placeholder="{{ 'sections.cart.note' | t }}">{{ cart.note }}</textarea>
+        </cart-note>
+      {%- endif -%}
+
+      <div class="cart__blocks">
+        {% for block in section.blocks %}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+            {%- when 'subtotal' -%}
+              <div class="js-contents" {{ block.shopify_attributes }}>
+                <div class="totals">
+                  <h2 class="totals__subtotal">{{ 'sections.cart.subtotal' | t }}</h2>
+                  <p class="totals__subtotal-value">{{ cart.total_price | money_with_currency }}</p>
+                </div>
+
+                <div>
+                  {%- if cart.cart_level_discount_applications.size > 0 -%}
+                    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+                      {%- for discount in cart.cart_level_discount_applications -%}
+                        <li class="discounts__discount discounts__discount--position">
+                          {%- render 'icon-discount' -%}
+                          {{ discount.title }}
+                          (-{{ discount.total_allocated_amount | money }})
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+
+                <small class="tax-note caption-large rte">
+                  {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+                    {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                  {%- elsif cart.taxes_included -%}
+                    {{ 'sections.cart.taxes_included_but_shipping_at_checkout' | t }}
+                  {%- elsif shop.shipping_policy.body != blank -%}
+                    {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+                  {%- else -%}
+                    {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
+                  {%- endif -%}
+                </small>
+              </div>
+            {%- else -%}
+              <div class="cart__ctas" {{ block.shopify_attributes }}>
+                <noscript>
+                  <button type="submit" class="cart__update-button button button--secondary" form="cart">
+                    {{ 'sections.cart.update' | t }}
+                  </button>
+                </noscript>
+
+                <button type="submit" id="checkout" class="cart__checkout-button button" name="checkout"{% if cart == empty %} disabled{% endif %} form="cart">
+                  {{ 'sections.cart.checkout' | t }}
+                </button>
+              </div>
+
+              {%- if additional_checkout_buttons -%}
+                <div class="cart__dynamic-checkout-buttons additional-checkout-buttons">
+                  {{ content_for_additional_checkout_buttons }}
+                </div>
+              {%- endif -%}
+          {%- endcase -%}
+        {% endfor %}
+
+        <div id="cart-errors"></div>
+         <!-- Button trigger modal -->
+         <button type="button" class="cart__checkout-button button w-100 btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Tính toán phí vận chuyển
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Tính phí vận chuyển</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          
+          <div class="form-group">
+            <label for="inputAddress">Nhập địa chỉ</label>
+            <select name="calc_shipping_provinces" id="province" class="form-select mb-5" required="">
+              <option value="">Tỉnh / Thành phố</option>
+            </select>
+            <select name="calc_shipping_district" id="district"class="form-select mb-5" required="">
+              <option value="">Quận / Huyện</option>
+            </select>
+            <input type="text" class="form-control" id="inputAddress" placeholder="Ví dụ: 450A Điện Biên Phủ">
+          </div>
+          <input class="billing_address_1" name="" type="hidden" value="">
+          <input class="billing_address_2" name="" type="hidden" value="">
+          <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="btn-submit" class="btn btn-primary">Gửi</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    function isIE() {
+      const ua = window.navigator.userAgent;
+      const msie = ua.indexOf('MSIE ');
+      const trident = ua.indexOf('Trident/');
+
+      return (msie > 0 || trident > 0);
+    }
+
+    if (!isIE()) return;
+    const cartSubmitInput = document.createElement('input');
+    cartSubmitInput.setAttribute('name', 'checkout');
+    cartSubmitInput.setAttribute('type', 'hidden');
+    document.querySelector('#cart').appendChild(cartSubmitInput);
+    document.querySelector('#checkout').addEventListener('click', function(event) {
+      document.querySelector('#cart').submit();
+    });
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+  $(document).ready(function(){
+    console.log('ahihi');
+  })
+  $('#btn-submit').on('click', function(){
+    console.log($('#province option:selected').text());
+    const provice = $('#province option:selected').text();
+    const district = $('#district option:selected').text()
+    // const data = {
+    //   "pick_province": "Hồ chí minh",
+    //   "pick_district": "Tân bình",
+    //   "province": provice,
+    //   "district": district,
+    //   "weight": 300,
+    //   "deliver_option": "none"
+    // }
+    var data = JSON.stringify({
+      "pick_province": "Hồ chí minh",
+      "pick_district": "Tân bình",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Long Điền",
+      "weight": 300,
+      "deliver_option": "none"
+    });
+
+    // var settings = {
+    //   "url": "https://services.giaohangtietkiem.vn/services/shipment/fee?",
+    //   "method": "GET",
+    //   "timeout": 0,
+    //   "headers": {
+    //     "Token": "84582D29426779EE92FDAE6b5668EF67c4f08372",
+    //     "Content-Type": "application/json",
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Access-Control-Request-Headers": "Content-Type",
+    //     "Content-Type": "application/json"
+    //   },
+    //   "data": JSON.stringify(data),
+    // };
+
+    console.log(data);
+    $.ajax({
+      type: "GET",
+      beforeSend: function(request){
+        request.setRequestHeader("Access-Control-Allow-Origin","https://services.giaohangtietkiem.vn");
+        request.setRequestHeader("Token", "84582D29426779EE92FDAE6b5668EF67c4f08372");
+      },
+      url: "https://services.giaohangtietkiem.vn/services/shipment/fee?",
+      // dataType: "json",
+      contentType: "application/json",
+      data: JSON.stringify({
+      "pick_province": "Hồ chí minh",
+      "pick_district": "Tân bình",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Long Điền",
+      "weight": 300,
+      "deliver_option": "none"
+    }),
+      processData: false,
+      success: function (response) {
+        alert('successfully');
+        console.log(response);
+      },
+      error: function (error) {
+        alert('Error. Try again later.');
+      },
+    
+    })
+
+
+    // var data = JSON.stringify({
+    //   "pick_province": "Hồ chí minh",
+    //   "pick_district": "Tân bình",
+    //   "province": provice,
+    //   "district": district,
+    //   "weight": 300,
+    //   "deliver_option": "none"
+    // });
+
+    // var config = {
+    //   method: 'get',
+    //   url: 'https://services.giaohangtietkiem.vn/services/shipment/fee?',
+    //   headers: { 
+    //     'Token': '84582D29426779EE92FDAE6b5668EF67c4f08372', 
+    //     'Access-Control-Allow-Origin': '*', 
+    //     "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
+    //     'Access-Control-Request-Headers': 'Content-Type, Authorization, X-Requested-With', 
+    //     'Content-Type': 'application/json'
+    //   },
+    //   data : data
+    // };
+
+    //   axios(config)
+    //   .then(function (response) {
+    //     console.log(JSON.stringify(response.data));
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+
+  })
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.main-cart-footer.name",
+  "class": "cart__footer-wrapper",
+  "blocks": [
+    {
+      "type": "subtotal",
+      "name": "t:sections.main-cart-footer.blocks.subtotal.name",
+      "limit": 1
+    },
+    {
+      "type": "buttons",
+      "name": "t:sections.main-cart-footer.blocks.buttons.name",
+      "limit": 1
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}
